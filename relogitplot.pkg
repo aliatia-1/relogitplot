@@ -1,0 +1,10 @@
+v 3
+
+d relogitplot
+d
+d Ali Atia
+d
+d Predictive margins plots for relogit
+
+f relogitplot.ado
+f relogitplot.sthlp
