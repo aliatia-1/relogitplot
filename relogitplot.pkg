@@ -2,9 +2,10 @@ v 3
 
 d relogitplot
 d
-d Ali Atia
+d Written by Ali Atia
 d
 d Predictive margins plots for relogit
+d Requires relogit, written by Michael Tomz, Gary King, and Langche Zeng
 
 f relogitplot.ado
 f relogitplot.sthlp
