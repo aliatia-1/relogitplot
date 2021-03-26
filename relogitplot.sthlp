@@ -15,7 +15,7 @@
 {marker options}{...}
 {title:Options}
 
-{opt range} is required. It specifies that the plot should be drawn for the predicted values of y from value #1 to value #2 of x, in steps of #d.
+{opt range} is required. It specifies that the plot should be drawn for the predicted probabilities of y from value #1 to value #2 of x, in steps of #d.
 
 {opt level} specifies the desired confidence interval. Optional, default is 95.
 {opt stat} specifies the statistic at which all other variables should be set. See {help setx} for options. Optional, default is mean.
