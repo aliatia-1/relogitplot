@@ -1,3 +1,4 @@
 v 3
 d Ali Atia
-p relogitplot Predictive margins plots for relogit
+d relogitplot: Predictive margins plots for relogit
+p relogitplot
