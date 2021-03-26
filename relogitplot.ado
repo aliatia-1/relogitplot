@@ -1,6 +1,6 @@
 * relogitplot written by Ali Atia. 
 * Requires relogit package by Michael Tomz, Gary King, and Langche Zeng.
-* Version 0
+* Version 1
 program define relogitplot
 	version 8.0
 	quietly{
