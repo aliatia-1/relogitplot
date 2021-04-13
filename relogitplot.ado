@@ -4,7 +4,7 @@
 program define relogitplot
 	version 8.0
 	quietly{
-		syntax varlist, range(numlist) [stat(string asis) level(numlist) noci *]
+		syntax varlist, range(numlist) [stat(string asis) level(integer 95) noci *]
 
 		if "`e(cmd)'" != "relogit" {
 			di as error "You must run relogit before relogitplot."
@@ -17,9 +17,6 @@ program define relogitplot
 		if `:word count `varlist''>1{
 			di as error "Too many variables specified."
 			exit
-		}
-		if "`level'" == ""{
-			local level 95
 		}
 		if "`stat'" == ""{
 			local stat mean
@@ -36,10 +33,7 @@ program define relogitplot
 		else{
 			local setx1 (`words') `stat'
 		}
-		mac li
-
-
-		forval x= `=`low''(`=`step'')`=`high''{
+		forval x= `low'(`step')`high'{
 			local newx = strtoname(strofreal(`x'))
 			setx `setx1' (`varlist') `x'
 			relogitq, level(`level')
@@ -51,28 +45,28 @@ program define relogitplot
 		preserve
 		clear 
 		set obs `:word count `howmany''
-		gen double n = .
-		forval x=`=`low''(`=`step'')`=`high''{
+		gen double `varlist' = .
+		forval x=`low'(`step')`high'{
 			local list `list' `x'
 		}
 		forval x= 1/`=_N'{
-			replace n = `:word `x' of `list'' in `x'
+			replace `varlist' = `:word `x' of `list'' in `x'
 		}
-		levelsof n,local(list)
-		gen c = .
+		levelsof `varlist',local(list)
+		gen probability = .
 		gen cu = .
 		gen cl = .
 		forval x= 1/`=_N'{
 			local newx = strtoname(strofreal(`:word `x' of `list''))
-			replace c = ``varlist'`newx'' if n==`:word `x' of `list''
-			replace cu = ``varlist'`newx'u' if n==`:word `x' of `list''
-			replace cl = ``varlist'`newx'l' if n==`:word `x' of `list''
+			replace probability = ``varlist'`newx'' if `varlist'==`:word `x' of `list''
+			replace cu = ``varlist'`newx'u' if `varlist'==`:word `x' of `list''
+			replace cl = ``varlist'`newx'l' if `varlist'==`:word `x' of `list''
 		}
 		if "`ci'" == ""{
-			twoway connected c n || rcap cu cl n ||,`options'
+			twoway connected probability `varlist' || rcap cu cl `varlist' ||,`options'
 		}
 		else{
-			twoway connected c n ||,`options'
+			twoway connected probability `varlist' ||,`options'
 		}
 	}
 end
