@@ -4,8 +4,7 @@
 program define relogitplot
 	version 8.0
 	quietly{
-		syntax varlist, range(numlist) [stat(string asis) level(integer 95) noci *]
-
+		syntax varlist(min=1 max=1), range(numlist min=3 max=3) [stat(string asis) level(integer 95) noci *]
 		if "`e(cmd)'" != "relogit" {
 			di as error "You must run relogit before relogitplot."
 			exit 198
@@ -13,10 +12,6 @@ program define relogitplot
 		if strpos("`e(rhsvars)'", "`varlist'")==0 { 
 			di as error "`varlist' was not an explanatory variable in the last estimated model."
 			exit 198
-		}
-		if `:word count `varlist''>1{
-			di as error "Too many variables specified."
-			exit
 		}
 		if "`stat'" == ""{
 			local stat mean
