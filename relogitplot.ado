@@ -1,6 +1,7 @@
 * relogitplot written by Ali Atia. 
 * Requires relogit package by Michael Tomz, Gary King, and Langche Zeng.
 * Version 1
+
 program define relogitplot
 	version 8.0
 	quietly{
@@ -37,31 +38,32 @@ program define relogitplot
 			local `varlist'`newx'l `=r(PrL)'
 			local howmany `howmany' ``varlist'`newx''
 		}
-		preserve
-		clear 
-		set obs `:word count `howmany''
-		gen double `varlist' = .
+		tempvar temp`varlist' probability cu cl
+		local obs `=c(N)'
+		if c(N)<`:word count `howmany''	set obs `:word count `howmany''
+		gen double `temp`varlist'' = .
 		forval x=`low'(`step')`high'{
 			local list `list' `x'
 		}
-		forval x= 1/`=_N'{
-			replace `varlist' = `:word `x' of `list'' in `x'
+		forval x= 1/`:word count `howmany''{
+			replace `temp`varlist'' = `:word `x' of `list'' in `x'
 		}
-		levelsof `varlist',local(list)
-		gen probability = .
-		gen cu = .
-		gen cl = .
-		forval x= 1/`=_N'{
+		levelsof `temp`varlist'',local(list)
+		gen `probability' = .
+		gen `cu' = .
+		gen `cl' = .
+		forval x= 1/`:word count `howmany''{
 			local newx = strtoname(strofreal(`:word `x' of `list''))
-			replace probability = ``varlist'`newx'' if `varlist'==`:word `x' of `list''
-			replace cu = ``varlist'`newx'u' if `varlist'==`:word `x' of `list''
-			replace cl = ``varlist'`newx'l' if `varlist'==`:word `x' of `list''
+			replace `probability' = ``varlist'`newx'' if `temp`varlist''==`:word `x' of `list''
+			replace `cu' = ``varlist'`newx'u' if `temp`varlist''==`:word `x' of `list''
+			replace `cl' = ``varlist'`newx'l' if `temp`varlist''==`:word `x' of `list''
 		}
 		if "`ci'" == ""{
-			twoway connected probability `varlist' || rcap cu cl `varlist' ||,`options'
+			twoway connected `probability' `temp`varlist'' || rcap `cu' `cl' `temp`varlist'' ||,`options'
 		}
 		else{
-			twoway connected probability `varlist' ||,`options'
+			twoway connected `probability' `temp`varlist'' ||,`options'
 		}
+		set obs `obs'
 	}
 end
