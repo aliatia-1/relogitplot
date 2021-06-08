@@ -58,6 +58,10 @@ program define relogitplot
 			replace `cu' = ``varlist'`newx'u' if `temp`varlist''==`:word `x' of `list''
 			replace `cl' = ``varlist'`newx'l' if `temp`varlist''==`:word `x' of `list''
 		}
+		label var `temp`varlist'' `varlist'
+		label var `probability' Probability
+		label var `cl' "Lower bound"
+		label var `cu' "Upper bound"
 		if "`ci'" == ""{
 			twoway connected `probability' `temp`varlist'' || rcap `cu' `cl' `temp`varlist'' ||,`options'
 		}
