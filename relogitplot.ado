@@ -1,6 +1,6 @@
 * relogitplot written by Ali Atia. 
 * Requires relogit package by Michael Tomz, Gary King, and Langche Zeng.
-* Version 1.1
+* Version 1.2
 
 program define relogitplot
 	version 8.0
@@ -68,6 +68,6 @@ program define relogitplot
 		else{
 			twoway connected `probability' `temp`varlist'' ||,`options'
 		}
-		set obs `obs'
+		if `=c(N)'>`obs' drop in `=`obs'+1'/`=_N'
 	}
 end
