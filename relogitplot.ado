@@ -40,6 +40,7 @@ program define relogitplot
 		}
 		tempvar temp`varlist' probability cu cl
 		local obs `=c(N)'
+		preserve
 		if c(N)<`:word count `howmany''	set obs `:word count `howmany''
 		gen double `temp`varlist'' = .
 		forval x=`low'(`step')`high'{
@@ -68,6 +69,6 @@ program define relogitplot
 		else{
 			twoway connected `probability' `temp`varlist'' ||,`options'
 		}
-		if `=c(N)'>`obs' drop in `=`obs'+1'/`=_N'
+		restore
 	}
 end
