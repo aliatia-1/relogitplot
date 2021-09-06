@@ -1,7 +1,6 @@
 * relogitplot written by Ali Atia. 
 * Requires relogit package by Michael Tomz, Gary King, and Langche Zeng.
-* Version 1.2
-
+* Version 1.3 962021
 program define relogitplot
 	version 8.0
 	quietly{
@@ -30,7 +29,7 @@ program define relogitplot
 			local setx1 (`words') `stat'
 		}
 		forval x= `low'(`step')`high'{
-			local newx = strtoname(strofreal(`x'))
+			local newx = strtoname("`:di %04.3f `x''")
 			setx `setx1' (`varlist') `x'
 			relogitq, level(`level')
 			local `varlist'`newx' `=r(Pr)'
@@ -54,7 +53,7 @@ program define relogitplot
 		gen `cu' = .
 		gen `cl' = .
 		forval x= 1/`:word count `howmany''{
-			local newx = strtoname(strofreal(`:word `x' of `list''))
+			local newx = strtoname("`:di %04.3f `:word `x' of `list'''")
 			replace `probability' = ``varlist'`newx'' if `temp`varlist''==`:word `x' of `list''
 			replace `cu' = ``varlist'`newx'u' if `temp`varlist''==`:word `x' of `list''
 			replace `cl' = ``varlist'`newx'l' if `temp`varlist''==`:word `x' of `list''
